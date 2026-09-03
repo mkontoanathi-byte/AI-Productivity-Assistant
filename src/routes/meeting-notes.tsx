@@ -79,7 +79,7 @@ function MeetingNotes() {
     if (!text) return;
     setDraft("");
     setMessages((m) => [...m, { role: "you", text }]);
-    const reply = replies[turn % replies.length];
+    const reply = replies[turn % replies.length] ?? replies[0]!;
     setTurn((t) => t + 1);
     setTimeout(() => setMessages((m) => [...m, { role: "aura", text: reply }]), 500);
   };
