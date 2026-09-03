@@ -10,33 +10,80 @@
 
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as IndexRouteImport } from './routes/index'
+import { Route as FocusSessionsRouteImport } from './routes/focus-sessions'
+import { Route as MeetingNotesRouteImport } from './routes/meeting-notes'
+import { Route as ResearchRouteImport } from './routes/research'
+import { Route as TaskPlannerRouteImport } from './routes/task-planner'
 
 const IndexRoute = IndexRouteImport.update({
   id: '/',
   path: '/',
   getParentRoute: () => rootRouteImport,
 } as any)
+const FocusSessionsRoute = FocusSessionsRouteImport.update({
+  id: '/focus-sessions',
+  path: '/focus-sessions',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const MeetingNotesRoute = MeetingNotesRouteImport.update({
+  id: '/meeting-notes',
+  path: '/meeting-notes',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ResearchRoute = ResearchRouteImport.update({
+  id: '/research',
+  path: '/research',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const TaskPlannerRoute = TaskPlannerRouteImport.update({
+  id: '/task-planner',
+  path: '/task-planner',
+  getParentRoute: () => rootRouteImport,
+} as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
+  '/focus-sessions': typeof FocusSessionsRoute
+  '/meeting-notes': typeof MeetingNotesRoute
+  '/research': typeof ResearchRoute
+  '/task-planner': typeof TaskPlannerRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
+  '/focus-sessions': typeof FocusSessionsRoute
+  '/meeting-notes': typeof MeetingNotesRoute
+  '/research': typeof ResearchRoute
+  '/task-planner': typeof TaskPlannerRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
+  '/focus-sessions': typeof FocusSessionsRoute
+  '/meeting-notes': typeof MeetingNotesRoute
+  '/research': typeof ResearchRoute
+  '/task-planner': typeof TaskPlannerRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/'
+  fullPaths:
+    '/' | '/focus-sessions' | '/meeting-notes' | '/research' | '/task-planner'
   fileRoutesByTo: FileRoutesByTo
-  to: '/'
-  id: '__root__' | '/'
+  to: '/' | '/focus-sessions' | '/meeting-notes' | '/research' | '/task-planner'
+  id:
+    | '__root__'
+    | '/'
+    | '/focus-sessions'
+    | '/meeting-notes'
+    | '/research'
+    | '/task-planner'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
+  FocusSessionsRoute: typeof FocusSessionsRoute
+  MeetingNotesRoute: typeof MeetingNotesRoute
+  ResearchRoute: typeof ResearchRoute
+  TaskPlannerRoute: typeof TaskPlannerRoute
 }
 
 declare module '@tanstack/react-router' {
@@ -48,11 +95,43 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof IndexRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/focus-sessions': {
+      id: '/focus-sessions'
+      path: '/focus-sessions'
+      fullPath: '/focus-sessions'
+      preLoaderRoute: typeof FocusSessionsRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/meeting-notes': {
+      id: '/meeting-notes'
+      path: '/meeting-notes'
+      fullPath: '/meeting-notes'
+      preLoaderRoute: typeof MeetingNotesRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/research': {
+      id: '/research'
+      path: '/research'
+      fullPath: '/research'
+      preLoaderRoute: typeof ResearchRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/task-planner': {
+      id: '/task-planner'
+      path: '/task-planner'
+      fullPath: '/task-planner'
+      preLoaderRoute: typeof TaskPlannerRouteImport
+      parentRoute: typeof rootRouteImport
+    }
   }
 }
 
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
+  FocusSessionsRoute: FocusSessionsRoute,
+  MeetingNotesRoute: MeetingNotesRoute,
+  ResearchRoute: ResearchRoute,
+  TaskPlannerRoute: TaskPlannerRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
