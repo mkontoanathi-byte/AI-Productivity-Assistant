@@ -1,24 +1,27 @@
 import { useState, type ReactNode } from "react";
 import { Link, useRouterState } from "@tanstack/react-router";
+import { Toaster } from "sonner";
 import {
   LayoutDashboard,
-  CalendarCheck,
+  Table2,
+  FolderSync,
   Sparkles,
-  NotebookPen,
-  Timer,
+  Info,
   Menu,
   X,
   ShieldAlert,
 } from "lucide-react";
 import { AuraMark } from "./logo";
+import { ThemeSwitcher } from "./theme";
+import { ConnectedPlatforms } from "./platforms";
 import { cn } from "@/lib/utils";
 
 const nav = [
   { to: "/", label: "Dashboard", icon: LayoutDashboard },
-  { to: "/task-planner", label: "Task Planner", icon: CalendarCheck },
-  { to: "/research", label: "Research", icon: Sparkles },
-  { to: "/meeting-notes", label: "Meeting Notes", icon: NotebookPen },
-  { to: "/focus-sessions", label: "Focus Sessions", icon: Timer },
+  { to: "/master-grid", label: "Master Grid", icon: Table2 },
+  { to: "/assets", label: "Asset & Drive Hub", icon: FolderSync },
+  { to: "/research", label: "Trend & Hook AI", icon: Sparkles },
+  { to: "/about", label: "About Aura", icon: Info },
 ] as const;
 
 function NavList({ onNavigate }: { onNavigate?: (() => void) | undefined }) {
@@ -50,16 +53,18 @@ function NavList({ onNavigate }: { onNavigate?: (() => void) | undefined }) {
 
 function SidebarInner({ onNavigate }: { onNavigate?: (() => void) | undefined }) {
   return (
-    <div className="flex h-full flex-col gap-8 p-5">
+    <div className="flex h-full flex-col gap-6 overflow-y-auto p-5">
       <Link to="/" onClick={onNavigate} className="focus-ring flex items-center gap-3 rounded-xl">
         <AuraMark />
         <span className="font-display text-2xl leading-none tracking-tight">Aura</span>
       </Link>
       <NavList onNavigate={onNavigate} />
+      <ConnectedPlatforms />
+      <ThemeSwitcher />
       <div className="mt-auto rounded-2xl border border-border bg-rose/50 p-4">
-        <p className="text-sm font-semibold">Your Chief of Staff</p>
+        <p className="text-sm font-semibold">Social command centre</p>
         <p className="mt-1 text-xs leading-relaxed text-muted-foreground">
-          Aura drafts, you decide. Every suggestion is editable before it leaves your desk.
+          Plan, approve and publish every channel from one grid. Aura drafts, you decide.
         </p>
       </div>
     </div>
@@ -79,8 +84,8 @@ export function ResponsibleAiBanner() {
           <p className="text-sm font-bold uppercase tracking-[0.12em]">Responsible AI disclaimer</p>
           <p className="mt-1 text-sm leading-relaxed">
             Aura's outputs are AI-generated drafts and can be incomplete or wrong. Always review,
-            edit, and verify before sharing, deciding, or acting. Avoid entering confidential,
-            personal, or regulated data. A human stays accountable for every final decision.
+            edit, and verify before publishing. Avoid entering confidential, personal, or regulated
+            data. A human stays accountable for every post that goes live.
           </p>
         </div>
       </div>
@@ -93,6 +98,8 @@ export function AppShell({ children }: { children: ReactNode }) {
 
   return (
     <div className="min-h-screen bg-background">
+      <Toaster position="top-right" richColors={false} />
+
       {/* Fixed sidebar (desktop) */}
       <div className="fixed inset-y-0 left-0 z-30 hidden w-64 border-r border-border bg-sidebar lg:block">
         <SidebarInner />
@@ -121,7 +128,7 @@ export function AppShell({ children }: { children: ReactNode }) {
             onClick={() => setOpen(false)}
             className="absolute inset-0 bg-foreground/25"
           />
-          <div className="absolute inset-y-0 left-0 w-72 max-w-[85vw] border-r border-border bg-sidebar pt-16 shadow-lift">
+          <div className="absolute inset-y-0 left-0 w-72 max-w-[85vw] overflow-y-auto border-r border-border bg-sidebar pt-16 shadow-lift">
             <SidebarInner onNavigate={() => setOpen(false)} />
           </div>
         </div>
@@ -132,7 +139,8 @@ export function AppShell({ children }: { children: ReactNode }) {
           {children}
           <ResponsibleAiBanner />
           <footer className="mt-6 pb-4 text-xs text-muted-foreground">
-            Aura Workspace — a local front-end prototype. No data leaves this browser.
+            Aura Workspace — a local front-end prototype. Publishing is simulated; no data leaves
+            this browser.
           </footer>
         </div>
       </main>
