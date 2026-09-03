@@ -64,12 +64,12 @@
 :root {
   --radius: 0.875rem; /* 14px */
   --stone: oklch(0.9463 0.007 88.64);
-  --background: oklch(0.9463 0.007 88.64);
-  --surface: oklch(0.9728 0.0054 95.1);
+  --background: oklch(0.8641 0.0293 15.08);
+  --surface: oklch(0.9463 0.007 88.64);
   --foreground: oklch(0.2575 0.054 38.06);
-  --card: oklch(0.9728 0.0054 95.1);
+  --card: oklch(0.9463 0.007 88.64);
   --card-foreground: oklch(0.2575 0.054 38.06);
-  --popover: oklch(0.9728 0.0054 95.1);
+  --popover: oklch(0.9463 0.007 88.64);
   --popover-foreground: oklch(0.2575 0.054 38.06);
   --primary: oklch(0.7511 0.0824 44.84);
   --primary-foreground: oklch(0.2575 0.054 38.06);
@@ -97,6 +97,71 @@
   --sidebar-border: oklch(0.8966 0.014 191.37);
   --sidebar-ring: oklch(0.7511 0.0824 44.84);
 }
+
+/* Theme 2 — Minimalist Stone */
+[data-theme="stone"] {
+  --stone: oklch(0.9761 0 89.88);
+  --background: oklch(0.9219 0 89.88);
+  --surface: oklch(0.9761 0 89.88);
+  --foreground: oklch(0.2891 0 89.88);
+  --card: oklch(0.9761 0 89.88);
+  --card-foreground: oklch(0.2891 0 89.88);
+  --popover: oklch(0.9761 0 89.88);
+  --popover-foreground: oklch(0.2891 0 89.88);
+  --primary: oklch(0.7155 0 89.88);
+  --primary-foreground: oklch(0.2891 0 89.88);
+  --secondary: oklch(0.9219 0 89.88);
+  --secondary-foreground: oklch(0.2891 0 89.88);
+  --muted: oklch(0.9219 0 89.88);
+  --muted-foreground: oklch(0.5 0 89.88);
+  --accent: oklch(0.8801 0 89.88);
+  --accent-foreground: oklch(0.2891 0 89.88);
+  --destructive: oklch(0.7155 0 89.88);
+  --destructive-foreground: oklch(0.2891 0 89.88);
+  --border: oklch(0.8601 0 89.88);
+  --input: oklch(0.8601 0 89.88);
+  --ring: oklch(0.7155 0 89.88);
+  --rose: oklch(0.8901 0 89.88);
+  --blue: oklch(0.9101 0 89.88);
+  --lime: oklch(0.8801 0 89.88);
+  --terracotta: oklch(0.7155 0 89.88);
+  --sidebar: oklch(0.9761 0 89.88);
+  --sidebar-foreground: oklch(0.2891 0 89.88);
+  --sidebar-border: oklch(0.8601 0 89.88);
+}
+
+/* Theme 3 — Midnight Executive */
+[data-theme="midnight"] {
+  --stone: oklch(0.2795 0.0368 260.03);
+  --background: oklch(0.2077 0.0398 265.75);
+  --surface: oklch(0.2795 0.0368 260.03);
+  --foreground: oklch(0.9842 0.0034 247.86);
+  --card: oklch(0.2795 0.0368 260.03);
+  --card-foreground: oklch(0.9842 0.0034 247.86);
+  --popover: oklch(0.2795 0.0368 260.03);
+  --popover-foreground: oklch(0.9842 0.0034 247.86);
+  --primary: oklch(0.7535 0.139 232.66);
+  --primary-foreground: oklch(0.2077 0.0398 265.75);
+  --secondary: oklch(0.35 0.035 260.03);
+  --secondary-foreground: oklch(0.9842 0.0034 247.86);
+  --muted: oklch(0.34 0.032 260.03);
+  --muted-foreground: oklch(0.75 0.02 250);
+  --accent: oklch(0.38 0.05 250);
+  --accent-foreground: oklch(0.9842 0.0034 247.86);
+  --destructive: oklch(0.7535 0.139 232.66);
+  --destructive-foreground: oklch(0.2077 0.0398 265.75);
+  --border: oklch(0.9842 0.0034 247.86 / 16%);
+  --input: oklch(0.9842 0.0034 247.86 / 18%);
+  --ring: oklch(0.7535 0.139 232.66);
+  --rose: oklch(0.38 0.05 250);
+  --blue: oklch(0.36 0.045 245);
+  --lime: oklch(0.42 0.06 235);
+  --terracotta: oklch(0.7535 0.139 232.66);
+  --sidebar: oklch(0.2795 0.0368 260.03);
+  --sidebar-foreground: oklch(0.9842 0.0034 247.86);
+  --sidebar-border: oklch(0.9842 0.0034 247.86 / 16%);
+}
+
 
 .dark {
   --stone: oklch(0.2575 0.054 38.06);
