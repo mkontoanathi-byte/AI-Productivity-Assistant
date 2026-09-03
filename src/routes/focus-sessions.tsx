@@ -20,7 +20,7 @@ export const Route = createFileRoute("/focus-sessions")({
       },
     ],
   }),
-  component: FocusSessions;
+  component: FocusSessions,
 });
 
 const presets = [
