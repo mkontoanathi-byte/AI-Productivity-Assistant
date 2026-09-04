@@ -11,6 +11,7 @@
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as FocusSessionsRouteImport } from './routes/focus-sessions'
+import { Route as MasterGridRouteImport } from './routes/master-grid'
 import { Route as MeetingNotesRouteImport } from './routes/meeting-notes'
 import { Route as ResearchRouteImport } from './routes/research'
 import { Route as TaskPlannerRouteImport } from './routes/task-planner'
@@ -23,6 +24,11 @@ const IndexRoute = IndexRouteImport.update({
 const FocusSessionsRoute = FocusSessionsRouteImport.update({
   id: '/focus-sessions',
   path: '/focus-sessions',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const MasterGridRoute = MasterGridRouteImport.update({
+  id: '/master-grid',
+  path: '/master-grid',
   getParentRoute: () => rootRouteImport,
 } as any)
 const MeetingNotesRoute = MeetingNotesRouteImport.update({
@@ -44,6 +50,7 @@ const TaskPlannerRoute = TaskPlannerRouteImport.update({
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/focus-sessions': typeof FocusSessionsRoute
+  '/master-grid': typeof MasterGridRoute
   '/meeting-notes': typeof MeetingNotesRoute
   '/research': typeof ResearchRoute
   '/task-planner': typeof TaskPlannerRoute
@@ -51,6 +58,7 @@ export interface FileRoutesByFullPath {
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/focus-sessions': typeof FocusSessionsRoute
+  '/master-grid': typeof MasterGridRoute
   '/meeting-notes': typeof MeetingNotesRoute
   '/research': typeof ResearchRoute
   '/task-planner': typeof TaskPlannerRoute
@@ -59,6 +67,7 @@ export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
   '/focus-sessions': typeof FocusSessionsRoute
+  '/master-grid': typeof MasterGridRoute
   '/meeting-notes': typeof MeetingNotesRoute
   '/research': typeof ResearchRoute
   '/task-planner': typeof TaskPlannerRoute
@@ -66,13 +75,25 @@ export interface FileRoutesById {
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
   fullPaths:
-    '/' | '/focus-sessions' | '/meeting-notes' | '/research' | '/task-planner'
+    | '/'
+    | '/focus-sessions'
+    | '/master-grid'
+    | '/meeting-notes'
+    | '/research'
+    | '/task-planner'
   fileRoutesByTo: FileRoutesByTo
-  to: '/' | '/focus-sessions' | '/meeting-notes' | '/research' | '/task-planner'
+  to:
+    | '/'
+    | '/focus-sessions'
+    | '/master-grid'
+    | '/meeting-notes'
+    | '/research'
+    | '/task-planner'
   id:
     | '__root__'
     | '/'
     | '/focus-sessions'
+    | '/master-grid'
     | '/meeting-notes'
     | '/research'
     | '/task-planner'
@@ -81,6 +102,7 @@ export interface FileRouteTypes {
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
   FocusSessionsRoute: typeof FocusSessionsRoute
+  MasterGridRoute: typeof MasterGridRoute
   MeetingNotesRoute: typeof MeetingNotesRoute
   ResearchRoute: typeof ResearchRoute
   TaskPlannerRoute: typeof TaskPlannerRoute
@@ -100,6 +122,13 @@ declare module '@tanstack/react-router' {
       path: '/focus-sessions'
       fullPath: '/focus-sessions'
       preLoaderRoute: typeof FocusSessionsRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/master-grid': {
+      id: '/master-grid'
+      path: '/master-grid'
+      fullPath: '/master-grid'
+      preLoaderRoute: typeof MasterGridRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/meeting-notes': {
@@ -129,6 +158,7 @@ declare module '@tanstack/react-router' {
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   FocusSessionsRoute: FocusSessionsRoute,
+  MasterGridRoute: MasterGridRoute,
   MeetingNotesRoute: MeetingNotesRoute,
   ResearchRoute: ResearchRoute,
   TaskPlannerRoute: TaskPlannerRoute,
