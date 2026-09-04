@@ -10,6 +10,7 @@
 
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as IndexRouteImport } from './routes/index'
+import { Route as AssetsRouteImport } from './routes/assets'
 import { Route as FocusSessionsRouteImport } from './routes/focus-sessions'
 import { Route as MasterGridRouteImport } from './routes/master-grid'
 import { Route as MeetingNotesRouteImport } from './routes/meeting-notes'
@@ -19,6 +20,11 @@ import { Route as TaskPlannerRouteImport } from './routes/task-planner'
 const IndexRoute = IndexRouteImport.update({
   id: '/',
   path: '/',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const AssetsRoute = AssetsRouteImport.update({
+  id: '/assets',
+  path: '/assets',
   getParentRoute: () => rootRouteImport,
 } as any)
 const FocusSessionsRoute = FocusSessionsRouteImport.update({
@@ -49,6 +55,7 @@ const TaskPlannerRoute = TaskPlannerRouteImport.update({
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
+  '/assets': typeof AssetsRoute
   '/focus-sessions': typeof FocusSessionsRoute
   '/master-grid': typeof MasterGridRoute
   '/meeting-notes': typeof MeetingNotesRoute
@@ -57,6 +64,7 @@ export interface FileRoutesByFullPath {
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
+  '/assets': typeof AssetsRoute
   '/focus-sessions': typeof FocusSessionsRoute
   '/master-grid': typeof MasterGridRoute
   '/meeting-notes': typeof MeetingNotesRoute
@@ -66,6 +74,7 @@ export interface FileRoutesByTo {
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
+  '/assets': typeof AssetsRoute
   '/focus-sessions': typeof FocusSessionsRoute
   '/master-grid': typeof MasterGridRoute
   '/meeting-notes': typeof MeetingNotesRoute
@@ -76,6 +85,7 @@ export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
   fullPaths:
     | '/'
+    | '/assets'
     | '/focus-sessions'
     | '/master-grid'
     | '/meeting-notes'
@@ -84,6 +94,7 @@ export interface FileRouteTypes {
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
+    | '/assets'
     | '/focus-sessions'
     | '/master-grid'
     | '/meeting-notes'
@@ -92,6 +103,7 @@ export interface FileRouteTypes {
   id:
     | '__root__'
     | '/'
+    | '/assets'
     | '/focus-sessions'
     | '/master-grid'
     | '/meeting-notes'
@@ -101,6 +113,7 @@ export interface FileRouteTypes {
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
+  AssetsRoute: typeof AssetsRoute
   FocusSessionsRoute: typeof FocusSessionsRoute
   MasterGridRoute: typeof MasterGridRoute
   MeetingNotesRoute: typeof MeetingNotesRoute
@@ -115,6 +128,13 @@ declare module '@tanstack/react-router' {
       path: '/'
       fullPath: '/'
       preLoaderRoute: typeof IndexRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/assets': {
+      id: '/assets'
+      path: '/assets'
+      fullPath: '/assets'
+      preLoaderRoute: typeof AssetsRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/focus-sessions': {
@@ -157,6 +177,7 @@ declare module '@tanstack/react-router' {
 
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
+  AssetsRoute: AssetsRoute,
   FocusSessionsRoute: FocusSessionsRoute,
   MasterGridRoute: MasterGridRoute,
   MeetingNotesRoute: MeetingNotesRoute,
