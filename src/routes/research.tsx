@@ -1,6 +1,7 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { useState } from "react";
-import { Sparkles } from "lucide-react";
+import { toast } from "sonner";
+import { Sparkles, TrendingUp } from "lucide-react";
 import { AppShell } from "@/components/aura/app-shell";
 import {
   Card,
@@ -10,95 +11,111 @@ import {
   EditableArea,
   PromptTemplates,
   Toggle,
+  Tabs,
   Tag,
 } from "@/components/aura/kit";
 
 export const Route = createFileRoute("/research")({
   head: () => ({
     meta: [
-      { title: "AI Research Assistant — Aura Workspace" },
+      { title: "AI Trend & Hook Analyzer — Aura Social Workspace" },
       {
         name: "description",
         content:
-          "Paste dense material and get an editable summary, key insights and a clear recommendation, with a simplify-complex-language toggle.",
+          "Analyze emerging social trends, generate scroll-stopping hooks and draft platform-specific captions for TikTok, LinkedIn and Instagram — all editable before publishing.",
       },
-      { property: "og:title", content: "AI Research Assistant — Aura Workspace" },
+      { property: "og:title", content: "AI Trend & Hook Analyzer — Aura Social Workspace" },
       {
         property: "og:description",
-        content: "Summaries, key insights and recommendations you can edit before sharing.",
+        content: "Trend reads, hooks and platform-native captions you can edit before scheduling.",
       },
     ],
   }),
-  component: Research,
+  component: TrendAnalyzer,
 });
 
 const templates = [
-  "Summarise for an exec audience",
-  "Pull out the risks",
-  "What should we do next?",
-  "Compare against our current approach",
+  "What's trending for B2B this week?",
+  "Give me 5 scroll-stopping hooks",
+  "Rewrite for LinkedIn thought leadership",
+  "Turn this into a TikTok script",
 ];
 
-const plain = {
-  summary:
-    "The report argues that hybrid teams lose most of their productivity to fragmented communication, not to remote work itself. Teams with clear async norms outperformed co-located teams on delivery predictability.",
-  insight:
-    "Meeting load correlates more strongly with missed deadlines than headcount does. The three worst-performing teams in the study each held over 18 recurring meetings a week.",
-  recommendation:
-    "Pilot a no-meeting Wednesday with written status updates for one quarter, and measure delivery predictability rather than hours logged.",
+const trends = [
+  { name: "Founder-led POV video", lift: "+38% reach", tone: "success" as const },
+  { name: "Unpolished 'work in progress' posts", lift: "+22% saves", tone: "calm" as const },
+  { name: "Carousel teardowns", lift: "+17% shares", tone: "important" as const },
+];
+
+const captions: Record<string, { plain: string; simple: string }> = {
+  tiktok: {
+    plain:
+      "Hook (0-2s): 'Your content calendar isn't broken — your approval chain is.' Cut to screen recording of five comment threads. Close on the one-grid fix. Caption: POV: the post was ready Tuesday. It went live Friday. #socialmediamanager",
+    simple:
+      "Start with: 'Your calendar isn't the problem — the approvals are.' Show the messy comments, then the fix. Caption: The post was ready Tuesday. It went out Friday.",
+  },
+  linkedin: {
+    plain:
+      "Most comms teams don't have a content problem — they have a coordination problem. Last quarter we tracked 41 posts from draft to live: the average post spent 3.4 days waiting on a decision, not on creative. Here's the workflow change that cut that to under a day.",
+    simple:
+      "Most teams aren't short on ideas — they're stuck waiting for approvals. We tracked 41 posts: each waited 3.4 days for a decision. Here's what fixed it.",
+  },
+  instagram: {
+    plain:
+      "Swipe → 5 signs your content calendar is quietly costing you reach (and the fix for each). Save this for your next planning session. 📌 #socialmediamanagement #contentstrategy",
+    simple:
+      "Swipe for 5 signs your calendar is costing you reach — plus the fix for each. Save it for planning day. 📌",
+  },
 };
 
-const simplified = {
-  summary:
-    "Hybrid teams struggle because messages get scattered, not because people work from home. Teams with clear rules for written updates delivered work more reliably.",
-  insight:
-    "Too many meetings, not too few people, is what makes teams miss deadlines. The weakest teams had more than 18 repeat meetings each week.",
-  recommendation:
-    "Try one meeting-free day a week for three months. Ask for short written updates instead, and check whether work lands on time.",
-};
-
-function Research() {
+function TrendAnalyzer() {
   const [simplify, setSimplify] = useState(false);
+  const [platform, setPlatform] = useState("linkedin");
   const [input, setInput] = useState(
-    "Paste an article, report extract, RFP section or long email thread here. Aura will draft a summary, surface key insights and suggest a next step.",
+    "Paste a campaign brief, competitor post, comment thread or performance export. Aura will read the trend, suggest hooks and draft platform-native captions.",
   );
-  const [prompt, setPrompt] = useState("Summarise for an exec audience");
-  const source = simplify ? simplified : plain;
+  const [prompt, setPrompt] = useState("What's trending for B2B this week?");
   const [edits, setEdits] = useState<Record<string, string>>({});
-  const value = (k: keyof typeof plain) => edits[`${simplify}-${k}`] ?? source[k];
-  const setValue = (k: keyof typeof plain, v: string) =>
-    setEdits((p) => ({ ...p, [`${simplify}-${k}`]: v }));
 
-  const cards = [
-    { k: "summary" as const, title: "Summary", tone: "blue" as const, tag: "Draft" },
-    { k: "insight" as const, title: "Key insight", tone: "rose" as const, tag: "Verify" },
-    { k: "recommendation" as const, title: "Recommendation", tone: "lime" as const, tag: "Your call" },
+  const key = `${platform}-${simplify}`;
+  const base = captions[platform]!;
+  const caption = edits[key] ?? (simplify ? base.simple : base.plain);
+
+  const hooks = [
+    "Your content calendar isn't broken — your approval chain is.",
+    "We tracked 41 posts from draft to live. Here's where they got stuck.",
+    "The best-performing post last month took 9 minutes to make.",
   ];
 
   return (
     <AppShell>
       <SectionHeading
-        eyebrow="Module 02"
-        title="AI Research Assistant"
-        sub="Give me the dense material and I'll hand back something you can actually use in a meeting. Read it critically — I can be confidently wrong."
+        eyebrow="Module 03"
+        title="AI Trend & Hook Analyzer"
+        sub="Read the moment, then write for it. Aura drafts hooks and platform-specific captions — treat every line as a suggestion, not a fact."
+        action={
+          <Button variant="cta" onClick={() => toast.success("Fresh trend read generated from the last 7 days.")}>
+            <Sparkles className="h-4 w-4" /> Analyse trends
+          </Button>
+        }
       />
 
       <div className="mt-8 grid gap-6 lg:grid-cols-[1.4fr_1fr]">
         <Card>
-          <CardTitle hint="Paste up to a few pages. Nothing leaves your browser in this prototype.">
-            Source material
-          </CardTitle>
+          <CardTitle hint="Nothing leaves your browser in this prototype.">Source material</CardTitle>
           <EditableArea
-            rows={12}
+            rows={10}
             value={input}
             onChange={(e) => setInput(e.target.value)}
-            aria-label="Research input"
+            aria-label="Trend input"
           />
           <div className="mt-4 flex flex-wrap gap-2">
-            <Button variant="cta">
-              <Sparkles className="h-4 w-4" /> Analyse
+            <Button variant="cta" onClick={() => toast.success("Hooks and captions drafted.")}>
+              <Sparkles className="h-4 w-4" /> Generate
             </Button>
-            <Button variant="quiet">Clear</Button>
+            <Button variant="quiet" onClick={() => setInput("")}>
+              Clear
+            </Button>
           </div>
         </Card>
 
@@ -111,7 +128,7 @@ function Research() {
               rows={3}
               value={prompt}
               onChange={(e) => setPrompt(e.target.value)}
-              aria-label="Research prompt"
+              aria-label="Analyzer prompt"
             />
           </Card>
           <Card>
@@ -119,28 +136,83 @@ function Research() {
               checked={simplify}
               onChange={setSimplify}
               label="Simplify complex language"
-              hint="Rewrite the outputs in plain, jargon-free English."
+              hint="Rewrite outputs in plain, jargon-free English."
             />
           </Card>
         </div>
       </div>
 
-      <div className="mt-6 grid gap-5 lg:grid-cols-3">
-        {cards.map((c) => (
-          <Card key={c.k} tone={c.tone}>
-            <div className="grid grid-cols-[minmax(0,1fr)_auto] items-center gap-3">
-              <h2 className="truncate text-lg">{c.title}</h2>
-              <Tag tone="muted">{c.tag}</Tag>
-            </div>
-            <EditableArea
-              className="mt-3"
-              rows={7}
-              value={value(c.k)}
-              onChange={(e) => setValue(c.k, e.target.value)}
-              aria-label={c.title}
-            />
-          </Card>
-        ))}
+      <div className="mt-6 grid gap-5 lg:grid-cols-[1fr_1.4fr]">
+        <Card tone="lime">
+          <CardTitle hint="Signals from the last 7 days across your channels.">
+            Trends rising
+          </CardTitle>
+          <ul className="flex flex-col gap-3">
+            {trends.map((t) => (
+              <li
+                key={t.name}
+                className="grid grid-cols-[minmax(0,1fr)_auto] items-center gap-3 rounded-xl border border-border bg-background/60 px-3 py-2.5"
+              >
+                <span className="min-w-0">
+                  <TrendingUp className="mr-1.5 inline h-3.5 w-3.5" />
+                  <span className="text-sm font-semibold">{t.name}</span>
+                </span>
+                <Tag tone={t.tone}>{t.lift}</Tag>
+              </li>
+            ))}
+          </ul>
+          <div className="mt-5">
+            <p className="text-sm font-semibold">Suggested hooks</p>
+            <ul className="mt-2 flex flex-col gap-2">
+              {hooks.map((h) => (
+                <li
+                  key={h}
+                  className="rounded-xl border border-border bg-card px-3 py-2 text-sm transition-colors duration-200 hover:bg-lime/50"
+                >
+                  {h}
+                </li>
+              ))}
+            </ul>
+          </div>
+        </Card>
+
+        <Card>
+          <div className="grid grid-cols-[minmax(0,1fr)_auto] items-center gap-3">
+            <CardTitle hint="Editable draft — tuned to the platform's native voice.">
+              Platform caption
+            </CardTitle>
+            <Tag tone="muted">Draft</Tag>
+          </div>
+          <Tabs
+            value={platform}
+            onChange={setPlatform}
+            tabs={[
+              { id: "tiktok", label: "TikTok" },
+              { id: "linkedin", label: "LinkedIn" },
+              { id: "instagram", label: "Instagram" },
+            ]}
+          />
+          <EditableArea
+            className="mt-4"
+            rows={9}
+            value={caption}
+            onChange={(e) => setEdits((p) => ({ ...p, [key]: e.target.value }))}
+            aria-label="Platform caption"
+          />
+          <div className="mt-4 flex flex-wrap gap-2">
+            <Button
+              variant="cta"
+              onClick={() =>
+                toast.success("Success: Content queued for publishing to selected platforms.")
+              }
+            >
+              Schedule
+            </Button>
+            <Button variant="ghost" onClick={() => toast("Caption pushed to the Master Grid as a draft.")}>
+              Send to Master Grid
+            </Button>
+          </div>
+        </Card>
       </div>
     </AppShell>
   );

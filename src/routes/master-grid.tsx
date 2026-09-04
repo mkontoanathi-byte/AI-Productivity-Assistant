@@ -23,7 +23,7 @@ export const Route = createFileRoute("/master-grid")({
       },
     ],
   }),
-  component: MasterGrid;
+  component: MasterGrid,
 });
 
 type Row = {
