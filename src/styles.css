@@ -47,6 +47,9 @@
   --color-lime: var(--lime);
   --color-lime-foreground: var(--foreground);
   --color-terracotta: var(--terracotta);
+  --color-indigo: var(--indigo);
+  --color-amber: var(--amber);
+  --color-emerald: var(--emerald);
   --color-stone: var(--stone);
   --color-surface: var(--surface);
   --color-sidebar: var(--sidebar);
@@ -88,6 +91,9 @@
   --blue: oklch(0.8966 0.014 191.37);
   --lime: oklch(0.9039 0.0411 108.71);
   --terracotta: oklch(0.7511 0.0824 44.84);
+  --indigo: oklch(0.8966 0.014 191.37);
+  --amber: oklch(0.8907 0.0621 84.32);
+  --emerald: oklch(0.9039 0.0411 108.71);
   --sidebar: oklch(0.9463 0.007 88.64);
   --sidebar-foreground: oklch(0.2575 0.054 38.06);
   --sidebar-primary: oklch(0.7511 0.0824 44.84);
@@ -161,6 +167,9 @@
   --blue: oklch(0.36 0.045 245);
   --lime: oklch(0.42 0.06 235);
   --terracotta: oklch(0.7535 0.139 232.66);
+  --indigo: #818cf8;
+  --amber: #fbbf24;
+  --emerald: #34d399;
   --sidebar: oklch(0.2795 0.0368 260.03);
   --sidebar-foreground: oklch(0.9842 0.0034 247.86);
   --sidebar-border: oklch(0.9842 0.0034 247.86 / 16%);
@@ -189,6 +198,9 @@
   --border: oklch(0.9463 0.007 88.64 / 16%);
   --input: oklch(0.9463 0.007 88.64 / 18%);
   --ring: oklch(0.7511 0.0824 44.84);
+  --indigo: oklch(0.55 0.09 250);
+  --amber: oklch(0.62 0.11 75);
+  --emerald: oklch(0.58 0.1 155);
   --sidebar: oklch(0.2575 0.054 38.06);
   --sidebar-foreground: oklch(0.9463 0.007 88.64);
   --sidebar-border: oklch(0.9463 0.007 88.64 / 16%);
