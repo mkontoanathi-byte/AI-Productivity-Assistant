@@ -307,35 +307,69 @@ function MasterGrid() {
 
       {view === "calendar" ? (
         <Card className="mt-6">
-          <CardTitle hint="Week of 7 September 2026 — drag-free prototype view.">
+          <CardTitle hint="September 2026 — each date is a cell and scheduled posts stack inside their day.">
             Content calendar
           </CardTitle>
-          <div className="grid gap-3 sm:grid-cols-3 xl:grid-cols-7">
-            {["Mon 7", "Tue 8", "Wed 9", "Thu 10", "Fri 11", "Sat 12", "Sun 13"].map((day, i) => {
-              const dayRows = rows.filter((r) => Number(r.date.slice(-2)) === 7 + i);
-              return (
-                <div
-                  key={day}
-                  className="min-h-32 rounded-xl border border-border bg-background/60 p-3 transition-colors duration-200 hover:bg-lime/30"
-                >
-                  <p className="text-xs font-semibold uppercase tracking-[0.12em] text-muted-foreground">
-                    {day}
-                  </p>
-                  <div className="mt-2 flex flex-col gap-2">
-                    {dayRows.map((r) => (
-                      <div key={r.id} className="rounded-lg border border-border bg-card p-2">
-                        <p className="line-clamp-2 text-xs font-semibold">{r.title}</p>
-                        <p className="mt-1 text-[0.65rem] text-muted-foreground">{r.platform}</p>
-                        <StatusBadge status={r.status} className="mt-1.5 text-[0.6rem]" />
-                      </div>
-                    ))}
-                    {dayRows.length === 0 ? (
-                      <p className="text-xs text-muted-foreground">Open slot</p>
-                    ) : null}
+          <div className="overflow-x-auto">
+            <div className="min-w-[720px]">
+              <div className="grid grid-cols-7 gap-2">
+                {["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"].map((d) => (
+                  <div
+                    key={d}
+                    className="rounded-lg bg-indigo/25 px-2 py-1.5 text-center text-[0.7rem] font-bold uppercase tracking-[0.12em]"
+                  >
+                    {d}
                   </div>
-                </div>
-              );
-            })}
+                ))}
+              </div>
+              <div className="mt-2 grid grid-cols-7 gap-2">
+                {Array.from({ length: 35 }).map((_, cell) => {
+                  // 1 September 2026 is a Tuesday → offset one leading blank cell.
+                  const dayNum = cell - 1 + 1;
+                  const inMonth = dayNum >= 1 && dayNum <= 30;
+                  const dayRows = inMonth
+                    ? rows.filter((r) => Number(r.date.slice(-2)) === dayNum)
+                    : [];
+                  return (
+                    <div
+                      key={cell}
+                      className={cn(
+                        "min-h-28 rounded-xl border border-border p-2 transition-colors duration-200",
+                        inMonth ? "bg-background/60 hover:bg-lime/30" : "bg-muted/40 opacity-50",
+                      )}
+                    >
+                      {inMonth ? (
+                        <>
+                          <p className="text-xs font-bold text-muted-foreground">{dayNum}</p>
+                          <div className="mt-1.5 flex flex-col gap-1.5">
+                            {dayRows.map((r) => {
+                              const Icon = platformIcon[r.platform] ?? Globe;
+                              return (
+                                <article
+                                  key={r.id}
+                                  className="rounded-lg border border-border bg-card p-2 shadow-soft"
+                                >
+                                  <p className="flex items-center gap-1.5 text-[0.65rem] font-semibold text-muted-foreground">
+                                    <Icon className="h-3 w-3 shrink-0" /> {r.platform}
+                                  </p>
+                                  <p className="mt-1 line-clamp-2 text-xs font-semibold leading-snug">
+                                    {r.title}
+                                  </p>
+                                  <StatusBadge
+                                    status={r.status}
+                                    className="mt-1.5 px-1.5 py-0.5 text-[0.6rem]"
+                                  />
+                                </article>
+                              );
+                            })}
+                          </div>
+                        </>
+                      ) : null}
+                    </div>
+                  );
+                })}
+              </div>
+            </div>
           </div>
         </Card>
       ) : null}
