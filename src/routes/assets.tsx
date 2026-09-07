@@ -1,10 +1,11 @@
 import { createFileRoute } from "@tanstack/react-router";
-import { useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { toast } from "sonner";
-import { CloudCheck, FileImage, FileVideo, RefreshCw, UploadCloud } from "lucide-react";
+import { CloudCheck, FileVideo, ImagePlus, RefreshCw, Trash2, UploadCloud } from "lucide-react";
 import { AppShell } from "@/components/aura/app-shell";
 import { Card, CardTitle, SectionHeading, Button, Tag, EditableArea } from "@/components/aura/kit";
-import { StatusBadge } from "@/components/aura/status";
+import { StatusBadge, STATUSES, type Status } from "@/components/aura/status";
+import { PLATFORMS } from "@/components/aura/platforms";
 import { cn } from "@/lib/utils";
 
 export const Route = createFileRoute("/assets")({
@@ -14,49 +15,213 @@ export const Route = createFileRoute("/assets")({
       {
         name: "description",
         content:
-          "Sync creative from cloud storage and drag high-res images or video straight into draft social posts, with approval states and publishing status.",
+          "Upload creative, preview thumbnails, write captions and pick the platforms each asset is destined for — all in one social asset gallery.",
       },
       { property: "og:title", content: "Asset & Drive Hub — Aura Social Workspace" },
       {
         property: "og:description",
-        content: "Digital asset management that plugs your creative library into every draft post.",
+        content: "Upload, caption and route creative to LinkedIn, Instagram, TikTok and X.",
       },
+      { property: "og:type", content: "website" },
+      { name: "twitter:card", content: "summary_large_image" },
     ],
   }),
   component: Assets,
 });
 
-type Asset = { id: string; name: string; kind: "image" | "video"; size: string; folder: string };
+type Asset = {
+  id: string;
+  name: string;
+  kind: "image" | "video";
+  size: string;
+  folder: string;
+  url?: string;
+  caption: string;
+  platforms: string[];
+  status: Status;
+};
 
-const library: Asset[] = [
-  { id: "a1", name: "brand-hero-4k.jpg", kind: "image", size: "6.2 MB", folder: "Brand / Q3" },
-  { id: "a2", name: "founder-interview.mp4", kind: "video", size: "184 MB", folder: "Video / Raw" },
-  { id: "a3", name: "carousel-slide-01.png", kind: "image", size: "2.1 MB", folder: "Campaigns" },
-  { id: "a4", name: "product-loop-9x16.mp4", kind: "video", size: "42 MB", folder: "TikTok" },
-  { id: "a5", name: "team-offsite-03.jpg", kind: "image", size: "5.4 MB", folder: "Culture" },
-  { id: "a6", name: "stat-card-reach.png", kind: "image", size: "1.3 MB", folder: "Reports" },
+const seeded: Asset[] = [
+  {
+    id: "a1",
+    name: "brand-hero-4k.jpg",
+    kind: "image",
+    size: "6.2 MB",
+    folder: "Brand / Q3",
+    caption: "Hero frame for the Q3 brand refresh announcement.",
+    platforms: ["linkedin", "instagram"],
+    status: "In Review",
+  },
+  {
+    id: "a2",
+    name: "founder-interview.mp4",
+    kind: "video",
+    size: "184 MB",
+    folder: "Video / Raw",
+    caption: "Founder interview — pull a 45s vertical cut for TikTok.",
+    platforms: ["tiktok"],
+    status: "Draft",
+  },
+  {
+    id: "a3",
+    name: "carousel-slide-01.png",
+    kind: "image",
+    size: "2.1 MB",
+    folder: "Campaigns",
+    caption: "Slide one: five signs your calendar is costing you reach.",
+    platforms: ["instagram", "linkedin"],
+    status: "Scheduled",
+  },
 ];
 
-function Assets() {
-  const [attached, setAttached] = useState<Asset[]>([library[2]!]);
-  const [over, setOver] = useState(false);
-  const [caption, setCaption] = useState(
-    "Draft: five signs your content calendar is quietly costing you reach. Swipe for the fixes.",
-  );
+const fmtSize = (bytes: number) =>
+  bytes > 1024 * 1024 ? `${(bytes / 1024 / 1024).toFixed(1)} MB` : `${Math.max(1, Math.round(bytes / 1024))} KB`;
 
-  const attach = (asset: Asset) => {
-    setAttached((prev) => (prev.some((a) => a.id === asset.id) ? prev : [...prev, asset]));
-    toast.success(`${asset.name} attached to the draft post.`);
+function AssetCard({
+  asset,
+  onChange,
+  onRemove,
+}: {
+  asset: Asset;
+  onChange: (patch: Partial<Asset>) => void;
+  onRemove: () => void;
+}) {
+  const togglePlatform = (id: string) =>
+    onChange({
+      platforms: asset.platforms.includes(id)
+        ? asset.platforms.filter((p) => p !== id)
+        : [...asset.platforms, id],
+    });
+
+  return (
+    <article className="flex flex-col rounded-2xl border border-border bg-background/60 p-3 transition-all duration-200 hover:border-lime">
+      <div className="relative grid h-36 place-items-center overflow-hidden rounded-xl border border-border bg-blue/40">
+        {asset.url && asset.kind === "image" ? (
+          <img src={asset.url} alt={asset.caption || asset.name} className="h-full w-full object-cover" />
+        ) : asset.url && asset.kind === "video" ? (
+          <video src={asset.url} muted playsInline className="h-full w-full object-cover" />
+        ) : asset.kind === "video" ? (
+          <FileVideo className="h-7 w-7" />
+        ) : (
+          <ImagePlus className="h-7 w-7" />
+        )}
+        <button
+          type="button"
+          aria-label={`Remove ${asset.name}`}
+          onClick={onRemove}
+          className="focus-ring absolute right-2 top-2 rounded-lg border border-border bg-card/90 p-1.5 transition-colors duration-200 hover:bg-terracotta"
+        >
+          <Trash2 className="h-3.5 w-3.5" />
+        </button>
+      </div>
+
+      <div className="mt-3 grid grid-cols-[minmax(0,1fr)_auto] items-start gap-2">
+        <div className="min-w-0">
+          <p className="truncate text-sm font-semibold">{asset.name}</p>
+          <p className="text-xs text-muted-foreground">
+            {asset.folder} · {asset.size}
+          </p>
+        </div>
+        <StatusBadge status={asset.status} />
+      </div>
+
+      <EditableArea
+        rows={2}
+        className="mt-3"
+        value={asset.caption}
+        placeholder="Write a caption for this asset…"
+        aria-label={`Caption for ${asset.name}`}
+        onChange={(e) => onChange({ caption: e.target.value })}
+      />
+
+      <p className="mt-3 text-[0.7rem] font-semibold uppercase tracking-[0.14em] text-muted-foreground">
+        Publish to
+      </p>
+      <div className="mt-2 flex flex-wrap gap-1.5">
+        {PLATFORMS.map(({ id, label, icon: Icon }) => {
+          const on = asset.platforms.includes(id);
+          return (
+            <button
+              key={id}
+              type="button"
+              aria-pressed={on}
+              onClick={() => togglePlatform(id)}
+              className={cn(
+                "focus-ring inline-flex items-center gap-1.5 rounded-full border border-border px-2.5 py-1 text-xs font-semibold transition-all duration-200",
+                on ? "bg-terracotta text-foreground" : "bg-card text-muted-foreground hover:bg-lime/60",
+              )}
+            >
+              <Icon className="h-3.5 w-3.5" />
+              {label}
+            </button>
+          );
+        })}
+      </div>
+
+      <label className="mt-3 flex items-center gap-2 text-xs font-semibold text-muted-foreground">
+        Status
+        <select
+          value={asset.status}
+          onChange={(e) => onChange({ status: e.target.value as Status })}
+          className="focus-ring flex-1 rounded-xl border border-border bg-background/70 px-2 py-1.5 text-xs font-semibold text-foreground"
+        >
+          {STATUSES.map((s) => (
+            <option key={s} value={s}>
+              {s}
+            </option>
+          ))}
+        </select>
+      </label>
+    </article>
+  );
+}
+
+function Assets() {
+  const [assets, setAssets] = useState<Asset[]>(seeded);
+  const [over, setOver] = useState(false);
+  const inputRef = useRef<HTMLInputElement>(null);
+  const urlsRef = useRef<string[]>([]);
+
+  useEffect(() => () => urlsRef.current.forEach((u) => URL.revokeObjectURL(u)), []);
+
+  const addFiles = (files: FileList | null) => {
+    const list = Array.from(files ?? []).filter((f) => /^(image|video)\//.test(f.type));
+    if (!list.length) {
+      toast("Only images and videos can be added to the gallery.");
+      return;
+    }
+    const next = list.map((file) => {
+      const url = URL.createObjectURL(file);
+      urlsRef.current.push(url);
+      return {
+        id: `${Date.now()}-${file.name}`,
+        name: file.name,
+        kind: file.type.startsWith("video") ? ("video" as const) : ("image" as const),
+        size: fmtSize(file.size),
+        folder: "Uploads",
+        url,
+        caption: "",
+        platforms: [],
+        status: "Draft" as Status,
+      };
+    });
+    setAssets((prev) => [...next, ...prev]);
+    toast.success(`${next.length} file${next.length > 1 ? "s" : ""} added to your gallery.`);
   };
+
+  const patch = (id: string, p: Partial<Asset>) =>
+    setAssets((prev) => prev.map((a) => (a.id === id ? { ...a, ...p } : a)));
+
+  const readyCount = assets.filter((a) => a.platforms.length > 0 && a.caption.trim()).length;
 
   return (
     <AppShell>
       <SectionHeading
         eyebrow="Module 02"
         title="Integrated Asset & Drive Hub"
-        sub="Your cloud drive, mirrored beside the draft. Drag any high-res file onto the post and Aura keeps the version, folder and rights notes with it."
+        sub="Upload your creative, see it as a real thumbnail, caption it once and choose exactly which channels it goes out on."
         action={
-          <Button variant="ghost" onClick={() => toast.success("Drive re-synced — 6 assets up to date.")}>
+          <Button variant="ghost" onClick={() => toast.success("Drive re-synced — gallery up to date.")}>
             <RefreshCw className="h-4 w-4" /> Sync drive
           </Button>
         }
@@ -66,127 +231,86 @@ function Assets() {
         <Tag tone="success">
           <CloudCheck className="h-3 w-3" /> Google Drive connected
         </Tag>
-        <Tag tone="calm">Last sync 4 minutes ago</Tag>
-        <Tag tone="muted">Simulated in this prototype</Tag>
+        <Tag tone="calm">{assets.length} assets in gallery</Tag>
+        <Tag tone="muted">{readyCount} ready to queue</Tag>
       </div>
 
-      <div className="mt-6 grid gap-6 lg:grid-cols-[1.2fr_1fr]">
-        <Card>
-          <CardTitle hint="Drag a card onto the draft, or press attach.">Drive library</CardTitle>
+      <Card className="mt-6">
+        <CardTitle hint="Drop files here or browse — images and video preview instantly.">
+          Upload creative
+        </CardTitle>
+        <div
+          onDragOver={(e) => {
+            e.preventDefault();
+            setOver(true);
+          }}
+          onDragLeave={() => setOver(false)}
+          onDrop={(e) => {
+            e.preventDefault();
+            setOver(false);
+            addFiles(e.dataTransfer.files);
+          }}
+          className={cn(
+            "grid place-items-center rounded-2xl border-2 border-dashed border-border p-8 text-center transition-colors duration-200",
+            over ? "border-terracotta bg-lime/50" : "bg-background/50",
+          )}
+        >
+          <UploadCloud className="h-7 w-7" />
+          <p className="mt-2 text-sm font-semibold">Drop high-res media here</p>
+          <p className="text-xs text-muted-foreground">JPG, PNG, GIF, MP4, MOV</p>
+          <input
+            ref={inputRef}
+            type="file"
+            accept="image/*,video/*"
+            multiple
+            className="sr-only"
+            onChange={(e) => {
+              addFiles(e.target.files);
+              e.target.value = "";
+            }}
+          />
+          <Button variant="cta" className="mt-4" onClick={() => inputRef.current?.click()}>
+            <ImagePlus className="h-4 w-4" /> Browse files
+          </Button>
+        </div>
+      </Card>
+
+      <Card className="mt-6">
+        <div className="mb-4 grid grid-cols-[minmax(0,1fr)_auto] items-center gap-3">
+          <CardTitle hint="Caption and route each asset, then queue the selected ones.">
+            Asset gallery
+          </CardTitle>
+          <Button
+            variant="cta"
+            onClick={() =>
+              readyCount
+                ? toast.success("Success: Content queued for publishing to selected platforms.")
+                : toast("Add a caption and pick at least one platform first.")
+            }
+          >
+            Publish Now
+          </Button>
+        </div>
+        {assets.length === 0 ? (
+          <p className="rounded-xl border border-dashed border-border p-8 text-center text-sm text-muted-foreground">
+            Your gallery is empty — upload something to get started.
+          </p>
+        ) : (
           <div className="grid gap-4 sm:grid-cols-2 xl:grid-cols-3">
-            {library.map((a) => (
-              <article
+            {assets.map((a) => (
+              <AssetCard
                 key={a.id}
-                draggable
-                onDragStart={(e) => e.dataTransfer.setData("text/plain", a.id)}
-                className="focus-ring cursor-grab rounded-xl border border-border bg-background/60 p-3 transition-all duration-200 hover:-translate-y-0.5 hover:bg-lime/40 active:cursor-grabbing"
-              >
-                <div className="grid h-24 place-items-center rounded-lg border border-border bg-blue/40">
-                  {a.kind === "image" ? (
-                    <FileImage className="h-7 w-7" />
-                  ) : (
-                    <FileVideo className="h-7 w-7" />
-                  )}
-                </div>
-                <p className="mt-2 truncate text-sm font-semibold">{a.name}</p>
-                <p className="text-xs text-muted-foreground">
-                  {a.folder} · {a.size}
-                </p>
-                <Button variant="quiet" className="mt-2 px-2.5 py-1 text-xs" onClick={() => attach(a)}>
-                  Attach to draft
-                </Button>
-              </article>
+                asset={a}
+                onChange={(p) => patch(a.id, p)}
+                onRemove={() => {
+                  setAssets((prev) => prev.filter((x) => x.id !== a.id));
+                  toast(`${a.name} removed from the gallery.`);
+                }}
+              />
             ))}
           </div>
-        </Card>
-
-        <div className="flex flex-col gap-6">
-          <Card tone="rose">
-            <div className="grid grid-cols-[minmax(0,1fr)_auto] items-center gap-3">
-              <CardTitle>Draft post</CardTitle>
-              <StatusBadge status="In Review" />
-            </div>
-            <EditableArea
-              rows={4}
-              value={caption}
-              onChange={(e) => setCaption(e.target.value)}
-              aria-label="Draft caption"
-            />
-            <div
-              onDragOver={(e) => {
-                e.preventDefault();
-                setOver(true);
-              }}
-              onDragLeave={() => setOver(false)}
-              onDrop={(e) => {
-                e.preventDefault();
-                setOver(false);
-                const id = e.dataTransfer.getData("text/plain");
-                const asset = library.find((a) => a.id === id);
-                if (asset) attach(asset);
-              }}
-              className={cn(
-                "mt-4 grid place-items-center rounded-xl border-2 border-dashed border-border p-6 text-center transition-colors duration-200",
-                over ? "border-terracotta bg-lime/50" : "bg-background/50",
-              )}
-            >
-              <UploadCloud className="h-6 w-6" />
-              <p className="mt-2 text-sm font-semibold">Drop high-res media here</p>
-              <p className="text-xs text-muted-foreground">JPG, PNG, MP4 — or drag from the library</p>
-            </div>
-            <ul className="mt-4 flex flex-col gap-2">
-              {attached.map((a) => (
-                <li
-                  key={a.id}
-                  className="grid grid-cols-[auto_minmax(0,1fr)_auto] items-center gap-2 rounded-xl border border-border bg-card px-3 py-2"
-                >
-                  {a.kind === "image" ? (
-                    <FileImage className="h-4 w-4 shrink-0" />
-                  ) : (
-                    <FileVideo className="h-4 w-4 shrink-0" />
-                  )}
-                  <span className="min-w-0">
-                    <span className="block truncate text-sm font-semibold">{a.name}</span>
-                    <span className="block text-xs text-muted-foreground">{a.size}</span>
-                  </span>
-                  <button
-                    type="button"
-                    onClick={() => setAttached((p) => p.filter((x) => x.id !== a.id))}
-                    className="focus-ring rounded-lg px-2 py-1 text-xs font-semibold text-muted-foreground hover:text-foreground"
-                  >
-                    Remove
-                  </button>
-                </li>
-              ))}
-            </ul>
-            <div className="mt-4 flex flex-wrap gap-2">
-              <Button
-                variant="cta"
-                onClick={() =>
-                  toast.success("Success: Content queued for publishing to selected platforms.")
-                }
-              >
-                Publish Now
-              </Button>
-              <Button variant="quiet" onClick={() => toast("Sent to Lerato and Sipho for approval.")}>
-                Request approval
-              </Button>
-            </div>
-          </Card>
-
-          <Card>
-            <CardTitle hint="Stakeholder activity on this asset set.">Approvals</CardTitle>
-            <ul className="flex flex-col gap-3 text-sm">
-              <li className="rounded-xl border border-border bg-background/60 p-3">
-                <strong>Sipho (Brand)</strong> approved the hero crop.
-              </li>
-              <li className="rounded-xl border border-border bg-background/60 p-3">
-                <strong>Nomsa (Legal)</strong> waiting on usage rights for founder-interview.mp4.
-              </li>
-            </ul>
-          </Card>
-        </div>
-      </div>
+        )}
+      </Card>
     </AppShell>
   );
 }
