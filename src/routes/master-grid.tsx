@@ -1,7 +1,20 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { useMemo, useState } from "react";
 import { toast } from "sonner";
-import { CalendarDays, Columns3, Table2, Send, MessageSquare, CheckCircle2 } from "lucide-react";
+import {
+  CalendarDays,
+  Columns3,
+  Table2,
+  Send,
+  MessageSquare,
+  CheckCircle2,
+  Linkedin,
+  Instagram,
+  Music2,
+  Globe,
+  Twitter,
+} from "lucide-react";
+import { cn } from "@/lib/utils";
 import { AppShell } from "@/components/aura/app-shell";
 import { Card, CardTitle, SectionHeading, Button, Tabs, Tag } from "@/components/aura/kit";
 import { StatusBadge, STATUSES, type Status } from "@/components/aura/status";
@@ -89,6 +102,13 @@ const seed: Row[] = [
     approved: [],
   },
 ];
+
+const platformIcon: Record<string, typeof Globe> = {
+  LinkedIn: Linkedin,
+  Instagram: Instagram,
+  TikTok: Music2,
+  X: Twitter,
+};
 
 function MasterGrid() {
   const [view, setView] = useState("grid");
