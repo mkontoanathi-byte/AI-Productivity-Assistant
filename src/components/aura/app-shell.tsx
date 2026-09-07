@@ -51,7 +51,15 @@ function NavList({ onNavigate }: { onNavigate?: (() => void) | undefined }) {
   );
 }
 
-function SidebarInner({ onNavigate }: { onNavigate?: (() => void) | undefined }) {
+function SidebarInner({
+  onNavigate,
+  session,
+  onSignOut,
+}: {
+  onNavigate?: (() => void) | undefined;
+  session: Session;
+  onSignOut: () => void;
+}) {
   return (
     <div className="flex h-full flex-col gap-6 overflow-y-auto p-5">
       <Link to="/" onClick={onNavigate} className="focus-ring flex items-center gap-3 rounded-xl">
@@ -61,11 +69,14 @@ function SidebarInner({ onNavigate }: { onNavigate?: (() => void) | undefined })
       <NavList onNavigate={onNavigate} />
       <ConnectedPlatforms />
       <ThemeSwitcher />
-      <div className="mt-auto rounded-2xl border border-border bg-rose/50 p-4">
-        <p className="text-sm font-semibold">Social command centre</p>
-        <p className="mt-1 text-xs leading-relaxed text-muted-foreground">
-          Plan, approve and publish every channel from one grid. Aura drafts, you decide.
-        </p>
+      <div className="mt-auto flex flex-col gap-3">
+        <div className="rounded-2xl border border-border bg-rose/50 p-4">
+          <p className="text-sm font-semibold">Social command centre</p>
+          <p className="mt-1 text-xs leading-relaxed text-muted-foreground">
+            Plan, approve and publish every channel from one grid. Aura drafts, you decide.
+          </p>
+        </div>
+        <ProfileMenu session={session} onSignOut={onSignOut} />
       </div>
     </div>
   );
