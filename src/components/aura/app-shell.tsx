@@ -14,6 +14,7 @@ import {
 import { AuraMark } from "./logo";
 import { ThemeSwitcher } from "./theme";
 import { ConnectedPlatforms } from "./platforms";
+import { ProfileMenu, SignInScreen, useSession, type Session } from "./auth";
 import { cn } from "@/lib/utils";
 
 const nav = [
@@ -106,6 +107,10 @@ export function ResponsibleAiBanner() {
 
 export function AppShell({ children }: { children: ReactNode }) {
   const [open, setOpen] = useState(false);
+  const { session, ready, signIn, signOut } = useSession();
+
+  if (!ready) return <div className="min-h-screen bg-background" />;
+  if (!session) return <SignInScreen onSignIn={signIn} />;
 
   return (
     <div className="min-h-screen bg-background">
@@ -113,7 +118,7 @@ export function AppShell({ children }: { children: ReactNode }) {
 
       {/* Fixed sidebar (desktop) */}
       <div className="fixed inset-y-0 left-0 z-30 hidden w-64 border-r border-border bg-sidebar lg:block">
-        <SidebarInner />
+        <SidebarInner session={session} onSignOut={signOut} />
       </div>
 
       {/* Mobile top bar */}
@@ -140,7 +145,7 @@ export function AppShell({ children }: { children: ReactNode }) {
             className="absolute inset-0 bg-foreground/25"
           />
           <div className="absolute inset-y-0 left-0 w-72 max-w-[85vw] overflow-y-auto border-r border-border bg-sidebar pt-16 shadow-lift">
-            <SidebarInner onNavigate={() => setOpen(false)} />
+            <SidebarInner onNavigate={() => setOpen(false)} session={session} onSignOut={signOut} />
           </div>
         </div>
       ) : null}
