@@ -4,8 +4,8 @@ import { cn } from "@/lib/utils";
 
 export const THEMES = [
   { id: "candy", label: "Cotton Candy Spice", swatch: ["#E5CBCC", "#EFEDE8", "#DB9E83"] },
-  { id: "stone", label: "Minimalist Stone", swatch: ["#E5E5E5", "#F7F7F7", "#A3A3A3"] },
-  { id: "midnight", label: "Midnight Executive", swatch: ["#1E293B", "#0F172A", "#38BDF8"] },
+  { id: "sage", label: "Pastel Sage", swatch: ["#F4F9F5", "#FFFFFF", "#84B179"] },
+  { id: "midnight", label: "Midnight Executive", swatch: ["#1E293B", "#818CF8", "#38BDF8"] },
 ] as const;
 
 export type ThemeId = (typeof THEMES)[number]["id"];
