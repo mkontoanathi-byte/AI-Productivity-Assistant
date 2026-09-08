@@ -23,7 +23,7 @@ export function useSession() {
   }, []);
 
   const signIn = (email: string) => {
-    const name = email.split("@")[0]?.replace(/[._-]+/g, " ") || "Aura member";
+    const name = email.split("@")[0]?.replace(/[._-]+/g, " ") || "Lela member";
     const next: Session = { name, email };
     window.localStorage.setItem(KEY, JSON.stringify(next));
     setSession(next);
@@ -84,7 +84,7 @@ export function SignInScreen({ onSignIn }: { onSignIn: (email: string) => void }
       <div className="w-full max-w-md rounded-2xl border border-border bg-card p-6 shadow-lift sm:p-8">
         <div className="flex items-center gap-3">
           <AuraMark />
-          <span className="font-display text-2xl leading-none tracking-tight">Aura</span>
+          <span className="font-sans text-2xl font-bold leading-none">Lela</span>
         </div>
         <h1 className="mt-6 text-2xl">Welcome back</h1>
         <p className="mt-2 text-sm text-muted-foreground">

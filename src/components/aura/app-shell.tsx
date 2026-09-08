@@ -22,7 +22,7 @@ const nav = [
   { to: "/master-grid", label: "Master Grid", icon: Table2 },
   { to: "/assets", label: "Asset & Drive Hub", icon: FolderSync },
   { to: "/research", label: "Trend & Hook AI", icon: Sparkles },
-  { to: "/about", label: "About Aura", icon: Info },
+  { to: "/about", label: "About Lela", icon: Info },
 ] as const;
 
 function NavList({ onNavigate }: { onNavigate?: (() => void) | undefined }) {
@@ -65,7 +65,7 @@ function SidebarInner({
     <div className="flex h-full flex-col gap-6 overflow-y-auto p-5">
       <Link to="/" onClick={onNavigate} className="focus-ring flex items-center gap-3 rounded-xl">
         <AuraMark />
-        <span className="font-display text-2xl leading-none tracking-tight">Aura</span>
+        <span className="font-sans text-2xl font-bold leading-none">Lela</span>
       </Link>
       <NavList onNavigate={onNavigate} />
       <ConnectedPlatforms />
@@ -74,7 +74,7 @@ function SidebarInner({
         <div className="rounded-2xl border border-border bg-rose/50 p-4">
           <p className="text-sm font-semibold">Social command centre</p>
           <p className="mt-1 text-xs leading-relaxed text-muted-foreground">
-            Plan, approve and publish every channel from one grid. Aura drafts, you decide.
+            Plan, approve and publish every channel from one grid. Lela drafts, you decide.
           </p>
         </div>
         <ProfileMenu session={session} onSignOut={onSignOut} />
@@ -95,7 +95,7 @@ export function ResponsibleAiBanner() {
         <div className="min-w-0">
           <p className="text-sm font-bold uppercase tracking-[0.12em]">Responsible AI disclaimer</p>
           <p className="mt-1 text-sm leading-relaxed">
-            Aura's outputs are AI-generated drafts and can be incomplete or wrong. Always review,
+            Lela’s outputs are AI-generated drafts and can be incomplete or wrong. Always review,
             edit, and verify before publishing. Avoid entering confidential, personal, or regulated
             data. A human stays accountable for every post that goes live.
           </p>
@@ -125,7 +125,7 @@ export function AppShell({ children }: { children: ReactNode }) {
       <div className="sticky top-0 z-40 grid grid-cols-[minmax(0,1fr)_auto] items-center gap-3 border-b border-border bg-sidebar/95 px-4 py-3 backdrop-blur lg:hidden">
         <Link to="/" className="focus-ring flex min-w-0 items-center gap-2 rounded-xl">
           <AuraMark className="h-8 w-8 shrink-0" />
-          <span className="truncate font-display text-xl">Aura</span>
+          <span className="truncate font-sans text-xl font-bold">Lela</span>
         </Link>
         <button
           type="button"
@@ -155,7 +155,7 @@ export function AppShell({ children }: { children: ReactNode }) {
           {children}
           <ResponsibleAiBanner />
           <footer className="mt-6 pb-4 text-xs text-muted-foreground">
-            Aura Workspace — a local front-end prototype. Publishing is simulated; no data leaves
+            Lela Workspace — a local front-end prototype. Publishing is simulated; no data leaves
             this browser.
           </footer>
         </div>

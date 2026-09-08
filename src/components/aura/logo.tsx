@@ -3,7 +3,7 @@ export function AuraMark({ className = "h-9 w-9" }: { className?: string }) {
     <svg
       viewBox="0 0 48 48"
       role="img"
-      aria-label="Aura Workspace logo"
+      aria-label="Lela Workspace logo"
       className={className}
     >
       <defs>
