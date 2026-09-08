@@ -22,13 +22,13 @@ import { StatusBadge, STATUSES, type Status } from "@/components/aura/status";
 export const Route = createFileRoute("/master-grid")({
   head: () => ({
     meta: [
-      { title: "The Master Grid — Aura Social Workspace" },
+      { title: "The Master Grid — Lela Social Workspace" },
       {
         name: "description",
         content:
           "Bulk-edit your social content calendar as a spreadsheet, or switch to Kanban and calendar views to manage the publishing pipeline across LinkedIn, Instagram, TikTok and X.",
       },
-      { property: "og:title", content: "The Master Grid — Aura Social Workspace" },
+      { property: "og:title", content: "The Master Grid — Lela Social Workspace" },
       {
         property: "og:description",
         content:

@@ -6,13 +6,13 @@ import { Card, CardTitle, SectionHeading, Button } from "@/components/aura/kit";
 export const Route = createFileRoute("/about")({
   head: () => ({
     meta: [
-      { title: "About Aura — Social Media Workspace" },
+      { title: "About Lela — Social Media Workspace" },
       {
         name: "description",
         content:
-          "Aura is a workspace built exclusively for modern social media managers, unifying content calendars, asset management, AI insights and scheduling in one platform.",
+          "Lela is a workspace built exclusively for modern social media managers, unifying content calendars, asset management, AI insights and scheduling in one platform.",
       },
-      { property: "og:title", content: "About Aura — Social Media Workspace" },
+      { property: "og:title", content: "About Lela — Social Media Workspace" },
       {
         property: "og:description",
         content:
@@ -28,7 +28,7 @@ function About() {
     <AppShell>
       <SectionHeading
         eyebrow="About"
-        title="About Aura"
+        title="About Lela"
         sub="Why this workspace exists, and who we built it for."
         action={
           <Link to="/master-grid" className="focus-ring rounded-xl">
@@ -41,12 +41,11 @@ function About() {
 
       <Card tone="rose" className="mt-8">
         <p className="max-w-3xl text-base leading-relaxed sm:text-lg">
-          Aura is a pioneering workspace designed exclusively for modern social media managers. We
-          recognized that digital storytelling often gets lost in chaotic spreadsheets and
-          fragmented apps. Our objective is simple: to streamline your entire social media ecosystem
-          into one intelligent, unified platform. From dynamic content calendars and asset
-          management to AI-driven insights and scheduling, Aura bridges the gap between creative
-          strategy and seamless execution.
+          Lela is a pioneering workspace designed exclusively for modern social media managers.
+          Rooted in the concept of bringing true order to creative chaos, our objective is simple: to
+          streamline your entire social media ecosystem into one intelligent, unified platform. From
+          dynamic content calendars and asset management to AI-driven insights and scheduling, Lela
+          bridges the gap between creative strategy and seamless execution.
         </p>
       </Card>
 

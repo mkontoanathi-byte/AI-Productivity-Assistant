@@ -9,13 +9,13 @@ import { ConnectedPlatforms } from "@/components/aura/platforms";
 export const Route = createFileRoute("/")({
   head: () => ({
     meta: [
-      { title: "Aura — Social Media Management Workspace" },
+      { title: "Lela — Social Media Management Workspace" },
       {
         name: "description",
         content:
-          "Aura unites content calendars, a spreadsheet-Kanban master grid, asset management, AI trend analysis and cross-platform analytics for social media and comms teams.",
+          "Lela unites content calendars, a spreadsheet-Kanban master grid, asset management, AI trend analysis and cross-platform analytics for social media and comms teams.",
       },
-      { property: "og:title", content: "Aura — Social Media Management Workspace" },
+      { property: "og:title", content: "Lela — Social Media Management Workspace" },
       {
         property: "og:description",
         content:
@@ -51,7 +51,7 @@ const modules = [
   {
     to: "/about" as const,
     icon: ArrowUpRight,
-    title: "About Aura",
+    title: "About Lela",
     copy: "Why we built a workspace only for social teams.",
     tone: "default" as const,
   },

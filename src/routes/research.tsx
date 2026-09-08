@@ -18,13 +18,13 @@ import {
 export const Route = createFileRoute("/research")({
   head: () => ({
     meta: [
-      { title: "AI Trend & Hook Analyzer — Aura Social Workspace" },
+      { title: "AI Trend & Hook Analyzer — Lela Social Workspace" },
       {
         name: "description",
         content:
           "Analyze emerging social trends, generate scroll-stopping hooks and draft platform-specific captions for TikTok, LinkedIn and Instagram — all editable before publishing.",
       },
-      { property: "og:title", content: "AI Trend & Hook Analyzer — Aura Social Workspace" },
+      { property: "og:title", content: "AI Trend & Hook Analyzer — Lela Social Workspace" },
       {
         property: "og:description",
         content: "Trend reads, hooks and platform-native captions you can edit before scheduling.",
@@ -72,7 +72,7 @@ function TrendAnalyzer() {
   const [simplify, setSimplify] = useState(false);
   const [platform, setPlatform] = useState("linkedin");
   const [input, setInput] = useState(
-    "Paste a campaign brief, competitor post, comment thread or performance export. Aura will read the trend, suggest hooks and draft platform-native captions.",
+    "Paste a campaign brief, competitor post, comment thread or performance export. Lela will read the trend, suggest hooks and draft platform-native captions.",
   );
   const [prompt, setPrompt] = useState("What's trending for B2B this week?");
   const [edits, setEdits] = useState<Record<string, string>>({});
@@ -92,7 +92,7 @@ function TrendAnalyzer() {
       <SectionHeading
         eyebrow="Module 03"
         title="AI Trend & Hook Analyzer"
-        sub="Read the moment, then write for it. Aura drafts hooks and platform-specific captions — treat every line as a suggestion, not a fact."
+        sub="Read the moment, then write for it. Lela drafts hooks and platform-specific captions — treat every line as a suggestion, not a fact."
         action={
           <Button variant="cta" onClick={() => toast.success("Fresh trend read generated from the last 7 days.")}>
             <Sparkles className="h-4 w-4" /> Analyse trends

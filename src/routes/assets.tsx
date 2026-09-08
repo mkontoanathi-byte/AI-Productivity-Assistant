@@ -11,13 +11,13 @@ import { cn } from "@/lib/utils";
 export const Route = createFileRoute("/assets")({
   head: () => ({
     meta: [
-      { title: "Asset & Drive Hub — Aura Social Workspace" },
+      { title: "Asset & Drive Hub — Lela Social Workspace" },
       {
         name: "description",
         content:
           "Upload creative, preview thumbnails, write captions and pick the platforms each asset is destined for — all in one social asset gallery.",
       },
-      { property: "og:title", content: "Asset & Drive Hub — Aura Social Workspace" },
+      { property: "og:title", content: "Asset & Drive Hub — Lela Social Workspace" },
       {
         property: "og:description",
         content: "Upload, caption and route creative to LinkedIn, Instagram, TikTok and X.",
